@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define HASH_TABLE_INITIAL_CAPACITY 1
-#define HASH_TABLE_MAX_LOAD 1.0f
+#define HASH_TABLE_INITIAL_CAPACITY 8
+#define HASH_TABLE_MAX_LOAD 0.75f
 
 #define HASH_TABLE_TOMBSTONE ((entry_t*) 1)
 
@@ -26,5 +26,6 @@ void hash_table_init(hash_table_t* hash_table);
 void hash_table_free(hash_table_t* hash_table);
 void hash_table_set(hash_table_t* hash_table, const void* key, size_t key_length, const void* value);
 const void* hash_table_get(hash_table_t* hash_table, const void* key, size_t key_length);
+void hash_table_delete(hash_table_t* hash_table, const void* key, size_t key_length);
 
 #endif

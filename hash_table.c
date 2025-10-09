@@ -27,8 +27,7 @@ void hash_table_free(hash_table_t* hash_table) {
 
 static inline entry_t* hash_table_find(entry_t* entries, size_t capacity, const void* key, size_t key_length) {
     entry_t* tombstone = NULL;
-    for (uint32_t index = hash(key, key_length) % capacity; ; index = (index + 1) % capacity) {
-        assert(index < capacity);
+    for (uint32_t index = hash(key, key_length) % capacity; 1; index = (index + 1) % capacity) {
         entry_t* entry = &entries[index];
         if (entry->key == NULL) {
             if (entry->value != HASH_TABLE_TOMBSTONE) {
@@ -84,4 +83,17 @@ const void* hash_table_get(hash_table_t* hash_table, const void* key, size_t key
         return NULL;
     }
     return entry->value;
+}
+
+void hash_table_delete(hash_table_t* hash_table, const void* key, size_t key_length) {
+    if (hash_table->size == 0) {
+        return;
+    }
+    entry_t* entry = hash_table_find(hash_table->entries, hash_table->capacity,
+            key, key_length);
+    if (entry->key == NULL) {
+        return;
+    }
+    entry->key = NULL;
+    entry->value = HASH_TABLE_TOMBSTONE;
 }
